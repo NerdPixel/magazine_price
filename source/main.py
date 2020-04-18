@@ -1,5 +1,3 @@
-from typing import List
-
 import PyPDF2 as pydf
 import os
 
