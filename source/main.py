@@ -2,12 +2,9 @@ from typing import List
 
 import PyPDF2 as pydf
 import os
-import glob
 
 
-def getFileName():
-    path = '../inputData'
-
+def getFileName(path):
     files = []
     # r=root, d=directories, f = files
     for r, d, f in os.walk(path):
@@ -18,5 +15,19 @@ def getFileName():
 
 
 if __name__ == '__main__':
-    files = getFileName()
+    inputPath = '../inputData'
+    outputPath = '../outputData'
 
+    filePdf = getFileName(inputPath)
+    for f in filePdf:
+        pdfFileObject = open(f, 'rb')
+        pdfRead = pydf.PdfFileReader(pdfFileObject)
+        nPages = pdfRead.getNumPages()
+        fileTxt = f.replace(".pdf", ".txt").replace(inputPath, outputPath)
+        txt = open(fileTxt, 'w')
+        for i in range(nPages):
+            page = pdfRead.getPage(i)
+            pageContent = page.extractText()
+            txt.write(pageContent)
+        txt.close()
+        pdfFileObject.close()
